@@ -1,0 +1,8 @@
+[
+  {
+    "id": 1,
+    "products": ["R01", "R01"],
+    "adjustment": 0.75,
+    "adjustmentType": "percentage"
+  }
+]

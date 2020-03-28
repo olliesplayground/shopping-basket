@@ -1,0 +1,20 @@
+[
+  {
+    "id": 1,
+    "lower": 0,
+    "upper": 49.99,
+    "cost": 4.95
+  },
+  {
+    "id": 2,
+    "lower": 50,
+    "upper": 89.99,
+    "cost": 2.95
+  },
+  {
+    "id": 3,
+    "lower": 90,
+    "upper": null,
+    "cost": 0
+  }
+]
