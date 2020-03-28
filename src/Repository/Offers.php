@@ -45,46 +45,63 @@ class Offers extends Repository
     private function checkAndCalculateOffer(Offer $offer, array $products): float
     {
         $offerProducts = $offer->getProducts();
-        $offerProductsCopy = $offerProducts;
 
-        $applicableProducts = [];
-        $reduction = 0;
+        $productCodes = [];
+        $productEntities = [];
 
         /**
+         * Compile an array of product codes &
+         * an array product entities
          * @var Product $product
          */
         foreach ($products as $product) {
+            $productCodes[] = $product->getCode();
+            $productEntities[$product->getCode()] = $product;
+        }
 
-            $productCode = $product->getCode();
+        $groupedProducts = $this->groupArrayValues($productCodes);
+        $groupedOfferProducts = $this->groupArrayValues($offerProducts);
 
-            foreach ($offerProductsCopy as $offerProductKey => $offerProduct) {
+        $matchedProducts = [];
 
-                if($offerProduct === $productCode) {
+        foreach ($groupedOfferProducts as $productCode => $offerProductCount) {
+            $basketProductCount = $groupedProducts[$productCode] ?? 0;
 
-                    $applicableProducts[] = $product;
-
-                    unset($offerProductsCopy[$offerProductKey]);
-
-                    if ( empty($offerProductsCopy) ) {
-                        $reduction += $this->calculateOfferReduction($offer, $applicableProducts);
-                        $offerProductsCopy = $offerProducts;
-                        $applicableProducts = [];
-                    }
-
-                    break;
-                }
+            if ($basketProductCount >= $offerProductCount) {
+                $matchedProducts[$productCode] = $basketProductCount / $offerProductCount;
             }
         }
 
-        return $reduction;
+        $matchedProductsCount = count($matchedProducts);
+
+        if ($matchedProductsCount > 0 && $matchedProductsCount === count($groupedOfferProducts)) {
+            /**
+             * Compile an array of product entities for this offer
+             */
+            $applicableProducts = [];
+
+            foreach ($offerProducts as $productCode) {
+                $applicableProducts[] = $productEntities[$productCode];
+            }
+
+            /**
+             * The number of times this offer applies to the products
+             */
+            $multiple = floor(min($matchedProducts));
+
+            return $this->calculateOfferReduction($offer, $applicableProducts, $multiple);
+        }
+
+        return 0;
     }
 
     /**
      * @param Offer $offer
      * @param array $products
+     * @param int $multiple
      * @return float
      */
-    private function calculateOfferReduction(Offer $offer, array $products): float
+    private function calculateOfferReduction(Offer $offer, array $products, int $multiple): float
     {
         $productTotal = array_reduce($products, static function($total, Product $product) {
             $total += $product->getPrice();
@@ -95,13 +112,32 @@ class Offers extends Repository
 
         switch ($offer->getAdjustmentType()) {
             case 'percentage':
-                $reduction = $productTotal - ($productTotal * $offer->getAdjustment());
+                $reduction = ( $productTotal - ($productTotal * $offer->getAdjustment()) ) * $multiple;
                 break;
-            case 'value':
-                $reduction = $offer->getAdjustment();
+            case 'fixed':
+                $reduction = $offer->getAdjustment() * $multiple;
                 break;
         }
 
         return $reduction;
+    }
+
+    /**
+     * @param array $arrayToGroup
+     * @return array
+     */
+    private function groupArrayValues(array $arrayToGroup): array
+    {
+        $groups = [];
+
+        foreach ($arrayToGroup as $item) {
+            if (!array_key_exists($item, $groups)) {
+                $groups[$item] = 0;
+            }
+
+            $groups[$item]++;
+        }
+
+        return $groups;
     }
 }

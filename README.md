@@ -3,7 +3,7 @@
 ## Assumptions
 
 - Offers are based only on which products are in the basket rather than basket value.
-- Any single product in the basket can only have one offer applied to it.
+- All applicable offers will be applied to the basket.
 - Delivery rates are based only on basket value rather than which products are in the basket.
 
 
@@ -178,7 +178,7 @@ The following are areas that could potentially be added or improved upon in futu
 
 - Error and exception handling
 - Value based offers
-- Offer priority, if multiple offers apply to a set of products in the basket
+- Global offer configuration to specify, for example, a maximum number of offers to apply 
 - Product based delivery rates
 - Caching of products added to the basket
 
