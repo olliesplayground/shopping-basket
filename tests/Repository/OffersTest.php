@@ -49,7 +49,7 @@ class OffersTest extends TestCase
         ];
 
         $value = $this->offersRepository->calculateOfferValue($products);
-        
+
         $this->assertEquals(12.5, round($value, 1));
     }
 }
