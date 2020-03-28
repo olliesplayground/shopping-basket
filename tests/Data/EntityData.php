@@ -19,7 +19,7 @@ class EntityData
     {
         return [
             ['id' => 1, 'products' => ['P1', 'P3'], 'adjustment' => 0.75, 'adjustmentType' => 'percentage'],
-            ['id' => 2, 'products' => ['P1'], 'adjustment' => 5, 'adjustmentType' => 'value']
+            ['id' => 2, 'products' => ['P1'], 'adjustment' => 5, 'adjustmentType' => 'fixed']
         ];
     }
 

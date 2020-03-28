@@ -41,15 +41,15 @@ class OffersTest extends TestCase
 
         $value = $this->offersRepository->calculateOfferValue($products);
 
+        $this->assertEquals(5, round($value, 1));
+
         $products = [
             new Product(...array_values($productArray[0])),
             new Product(...array_values($productArray[2]))
         ];
 
         $value = $this->offersRepository->calculateOfferValue($products);
-
-
-
+        
         $this->assertEquals(12.5, round($value, 1));
     }
 }
