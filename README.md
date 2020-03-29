@@ -88,7 +88,7 @@ The same array is then passed to a function in the Offers Repository that does t
 - For all applicable offers, the value is determined and added to a total reduction value.
 
 An offer can either have a percentage value or a fixed value applied, which is configured in the offer, and this is 
-taken into account in when determining the value of the offer when applying it to the applicable products. 
+taken into account when determining the value of the offer when applied to the applicable products. 
 
 Once the total reduction has been calculated it is deducted from the sub-total.
 
@@ -102,6 +102,12 @@ Offers are described in the JSON data as follows
     "adjustmentType": "percentage"
 }
 ```
+
+The process of determining whether an offer applies to the products in the basket is as follows:
+
+- Group all of the similar products together for both the basket and the offer products to give counts for each product.
+- Match products between the groups and check whether the number of products in the basket is at least as high as the number in the offer.
+- If all products match, find the lowest number of matches which gives how many times the offer applies to the product in the basket.
 
 Finally, the delivery rate is calculated based on the new sub-total. Multiple delivery rates can be configured for different 
 order value bands, where each delivery rate has an upper and lower limit. For whichever band the sub-total value fits into 
@@ -182,3 +188,8 @@ The following are areas that could potentially be added or improved upon in futu
 - Product based delivery rates
 - Caching of products added to the basket
 
+### Notes
+
+It should be noted that although a rudimentary entity/repository setup with a JSON flat file database backend is provided 
+in this project, if/when integrating this functionality into existing codebases, the use of existing or more mature data 
+management systems would be recommended. The structure of this project should minimise the effort involved in such a process.  
