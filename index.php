@@ -39,26 +39,33 @@ $tests = [
 ];
 
 ?>
-<table>
-    <tr>
-        <th>Products</th>
-        <th>Expected Result</th>
-        <th>Actual Result</th>
-        <th>Match</th>
-    </tr>
-    <?php
-    $mask = "\t<tr>\n\t\t<td>%s</td>\n\t\t<td>%s</td>\n\t\t<td>%s</td>\n\t\t<td>%s</td>\n\t</tr>\n";
-    foreach ($tests as $test) {
-        $basket->clearBasket();
+<html lang="en">
+<head>
+    <title>Shopping Basket</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+<body>
+    <table style="width: 100%;">
+        <tr>
+            <th>Products</th>
+            <th>Expected Result</th>
+            <th>Actual Result</th>
+            <th>Match</th>
+        </tr>
+        <?php
+        $mask = "\t<tr>\n\t\t<td>%s</td>\n\t\t<td>%s</td>\n\t\t<td>%s</td>\n\t\t<td>%s</td>\n\t</tr>\n";
+        foreach ($tests as $test) {
+            $basket->clearBasket();
 
-        foreach ($test['products'] as $product) {
-            $basket->addProduct($product);
+            foreach ($test['products'] as $product) {
+                $basket->addProduct($product);
+            }
+
+            $total = $basket->getTotal();
+
+            printf($mask, implode(',', $test['products']), $test['expected'], $total, ($test['expected'] === $total));
         }
-
-        $total = $basket->getTotal();
-
-        printf($mask, implode(',', $test['products']), $test['expected'], $total, ($test['expected'] === $total));
-    }
-    ?>
-</table>
-
+        ?>
+    </table>
+</body>
+</html>
