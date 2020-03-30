@@ -176,6 +176,8 @@ from the project root
 docker-compose up
 ```
 
+The project is also running on Heroku, this can be seen [here](https://olliesplaygrnd-shopping-basket.herokuapp.com/)
+
 [Docker](https://www.docker.com/) and [Docker Compose](https://docs.docker.com/compose/) are both required for this to work.
 
 ### Potential Improvement
