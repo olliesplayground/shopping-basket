@@ -38,17 +38,27 @@ $tests = [
     ]
 ];
 
-$mask = "| %-25s | %-20s | %-20s | %-10s |\n";
-printf($mask, 'Products', 'Expected Result', 'Actual Result', 'Match');
+?>
+<table>
+    <tr>
+        <th>Products</th>
+        <th>Expected Result</th>
+        <th>Actual Result</th>
+        <th>Match</th>
+    </tr>
+    <?php
+    $mask = "\t<tr>\n\t\t<td>%s</td>\n\t\t<td>%s</td>\n\t\t<td>%s</td>\n\t\t<td>%s</td>\n\t</tr>\n";
+    foreach ($tests as $test) {
+        $basket->clearBasket();
 
-foreach ($tests as $test) {
-    $basket->clearBasket();
+        foreach ($test['products'] as $product) {
+            $basket->addProduct($product);
+        }
 
-    foreach ($test['products'] as $product) {
-        $basket->addProduct($product);
+        $total = $basket->getTotal();
+
+        printf($mask, implode(',', $test['products']), $test['expected'], $total, ($test['expected'] === $total));
     }
+    ?>
+</table>
 
-    $total = $basket->getTotal();
-
-    printf($mask, implode(',', $test['products']), $test['expected'], $total, ($test['expected'] === $total));
-}
